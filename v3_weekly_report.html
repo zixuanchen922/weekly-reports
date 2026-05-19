@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OSA V3 阶段汇报</title>
+    <style>
+      :root {
+        --bg: #f2f5f8;
+        --panel: #ffffff;
+        --ink: #0f172a;
+        --muted: #4b5563;
+        --line: #d8dee8;
+        --brand: #0e7490;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC",
+          sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 8% 8%, #dff5ff 0, transparent 28%),
+          radial-gradient(circle at 92% 10%, #e8f9ef 0, transparent 30%),
+          var(--bg);
+      }
+
+      .wrap {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      .hero {
+        background: linear-gradient(140deg, #0f172a 0%, #164e63 62%, #155e75 100%);
+        color: #eef9ff;
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22);
+      }
+
+      .hero h1 {
+        margin: 0 0 10px;
+        font-size: 34px;
+      }
+
+      .hero p {
+        margin: 0;
+        color: #d6edf7;
+        line-height: 1.75;
+      }
+
+      .section {
+        margin-top: 20px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 20px;
+      }
+
+      .section h2 {
+        margin: 0 0 10px;
+        font-size: 24px;
+      }
+
+      .section .sub {
+        margin: 0 0 14px;
+        color: var(--muted);
+      }
+
+      .flow-layout {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 16px;
+      }
+
+      .timeline {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px;
+        background: #fbfdff;
+      }
+
+      .step {
+        position: relative;
+        padding: 12px 12px 12px 42px;
+        border-radius: 12px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.18s ease;
+      }
+
+      .step + .step {
+        margin-top: 10px;
+      }
+
+      .step::before {
+        content: "";
+        position: absolute;
+        left: 14px;
+        top: 19px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #98a2b3;
+      }
+
+      .step::after {
+        content: "";
+        position: absolute;
+        left: 19px;
+        top: 32px;
+        bottom: -12px;
+        width: 2px;
+        background: #d6dee8;
+      }
+
+      .step:last-child::after {
+        display: none;
+      }
+
+      .step:hover {
+        background: #f4f9fc;
+      }
+
+      .step.active {
+        background: #e8f7fb;
+        border-color: #bde7f2;
+      }
+
+      .step.active::before {
+        background: var(--brand);
+      }
+
+      .step .title {
+        font-weight: 700;
+      }
+
+      .step .desc {
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .detail {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 16px;
+        background: #fff;
+      }
+
+      .detail h3 {
+        margin: 0 0 8px;
+        font-size: 20px;
+      }
+
+      .detail p {
+        line-height: 1.74;
+        margin: 8px 0;
+      }
+
+      .kv {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .kv .item {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px;
+        background: #fafcff;
+      }
+
+      .kv .item .k {
+        color: #475569;
+        font-size: 12px;
+      }
+
+      .kv .item .v {
+        margin-top: 4px;
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .detail-cards {
+        display: none;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .detail-cards.show {
+        display: grid;
+      }
+
+      .detail-card {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px;
+        background: #f7fbff;
+      }
+
+      .detail-card h4 {
+        margin: 0 0 6px;
+        font-size: 15px;
+      }
+
+      .detail-card p {
+        margin: 0;
+        color: #334155;
+        line-height: 1.7;
+        font-size: 14px;
+      }
+
+      .modules {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px;
+        background: #fcfdff;
+      }
+
+      .card h4 {
+        margin: 0 0 8px;
+        font-size: 16px;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .compare {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .shot {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .shot .label {
+        background: #f8fbff;
+        border-bottom: 1px solid var(--line);
+        padding: 10px 12px;
+        font-weight: 700;
+      }
+
+      .shot img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .quad {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        padding: 8px;
+        background: #f5f8fd;
+      }
+
+      .quad .cell {
+        border: 1px solid #d7dfe9;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .quad .cell img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .summary {
+        color: #1f2937;
+        line-height: 1.82;
+        margin: 0;
+      }
+
+      .todo {
+        margin: 10px 0 0;
+        padding-left: 22px;
+        line-height: 1.9;
+        color: #1f2937;
+      }
+
+      @media (max-width: 980px) {
+        .modules,
+        .compare,
+        .flow-layout,
+        .detail-cards {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <section class="hero">
+        <h1>OSA V3 阶段汇报</h1>
+        <p>
+          把 V2.6 的手工特征路线升级为 DistilHuBERT
+          路线，完成移动端可运行闭环（录音→特征→打分→Debug
+          导出），并升级了前端页面，使其更用户友好。个人测试结果优于上个版本，稳定性显著提升，标准测试结果理想，中间态结果有待细化，多样本测试有待展开，各方面仍有明显提升空间。
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>1) V3 核心流程（点击查看具体模块介绍）</h2>
+        <p class="sub">左侧是整体链路，右侧可查看对应模块的具体说明。</p>
+        <div class="flow-layout">
+          <aside class="timeline" id="timeline">
+            <div class="step active" data-id="s1">
+              <div class="title">① 录音与切窗</div>
+              <div class="desc">录 0.5 秒，16kHz 单声道</div>
+            </div>
+            <div class="step" data-id="s2">
+              <div class="title">② DistilHuBERT 编码</div>
+              <div class="desc">波形 → 时序 hidden states</div>
+            </div>
+            <div class="step" data-id="s3">
+              <div class="title">③ 时序池化 + 768 维向量</div>
+              <div class="desc">mean pooling 聚合整段发音</div>
+            </div>
+            <div class="step" data-id="s4">
+              <div class="title">④ baseline 差分 + PCA16</div>
+              <div class="desc">强调“相对本人常态的偏移”</div>
+            </div>
+            <div class="step" data-id="s5">
+              <div class="title">⑤ 标准化 + LR 输出概率</div>
+              <div class="desc">logit → sigmoid → probability</div>
+            </div>
+            <div class="step" data-id="s6">
+              <div class="title">⑥ 阈值判定 + Debug 可追溯</div>
+              <div class="desc">threshold=0.2，保留全过程字段</div>
+            </div>
+          </aside>
+
+          <article class="detail">
+            <h3 id="detail-title">① 录音与切窗</h3>
+            <p id="detail-text">
+              每次采样固定 0.5 秒，采样率 16kHz，所以输入是 8000
+              个采样点。这一步先把输入标准化，避免后面模型被时长和采样率波动干扰。
+            </p>
+            <div class="kv" id="detail-kv"></div>
+            <div class="detail-cards" id="detail-cards"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>2) App 搭建工作</h2>
+        <div class="modules">
+          <div class="card">
+            <h4>应用壳层 / 启动</h4>
+            <p>
+              <code>app.dart</code>：模型 bundle 加载、V2/V3 管线选择、Session
+              主流程入口、Debug 页面路由。
+            </p>
+          </div>
+          <div class="card">
+            <h4>会话状态控制</h4>
+            <p>
+              <code>session_controller.dart</code>：baseline 采集、profile
+              构建、scoring 历史、异常与日志状态统一管理。
+            </p>
+          </div>
+          <div class="card">
+            <h4>V3 推理管线</h4>
+            <p>
+              <code>v3_distilhubert_session_inference_pipeline.dart</code> +
+              <code>v3_embedding_capture_service.dart</code> +
+              <code>v3_distilhubert_scorer.dart</code>。
+            </p>
+          </div>
+          <div class="card">
+            <h4>ONNX 端上特征提取</h4>
+            <p>
+              <code>onnx_distilhubert_embedding_extractor.dart</code>：载入
+              <code>distilhubert.onnx + .data</code>，执行前向并做时序池化。
+            </p>
+          </div>
+          <div class="card">
+            <h4>Bundle 结构化参数管理</h4>
+            <p>
+              <code>v3_distilhubert_bundle.dart</code> +
+              <code>model_bundle_loader.dart</code>：参数一致性校验与 family
+              分流加载。
+            </p>
+          </div>
+          <div class="card">
+            <h4>Debug 可追溯能力</h4>
+            <p>
+              <code>debug_page_v2.dart</code>：导出 snapshot/session package，展示
+              pipelineFamily、input/pca/z/logit、history、日志。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>3) 前端改进对比</h2>
+        <p class="sub">
+          左图：上一个版本（baseline/scoring/history 同页堆叠）。右图：新版四阶段页面（目录→示范→基准→测试）。
+        </p>
+        <div class="compare">
+          <div class="shot">
+            <div class="label">旧版页面（V3 早期）</div>
+            <img src="./assets/v2_old_page.jpg" alt="旧版 App 页面" />
+          </div>
+          <div class="shot">
+            <div class="label">新版页面（流程清晰，用户友好）</div>
+            <div class="quad">
+              <div class="cell">
+                <img src="./assets/v3_new_1_menu.jpg" alt="新版页面1 目录" />
+              </div>
+              <div class="cell">
+                <img src="./assets/v3_new_2_guide.jpg" alt="新版页面2 动作示范" />
+              </div>
+              <div class="cell">
+                <img src="./assets/v3_new_3_baseline.jpg" alt="新版页面3 基准录制" />
+              </div>
+              <div class="cell">
+                <img src="./assets/v3_new_4_scoring.jpg" alt="新版页面4 卷舌测试" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>4) 工作总结</h2>
+        <p class="summary">
+          V3模型从手工特征切到 DistilHuBERT，端上推理链路打通，基于我个人的测试，模型稳定性得到显著提升，不会出现得分乱飘的情况，且两类标准动作的识别非常精准。但有个明显问题，现在测试只要稍微卷舌就很容易识别成极高的准确率，而此时动作并不是正确动作，即对于中间态的识别有待调整和改进。<br />
+          未来工作方向：
+        </p>
+        <ol class="todo">
+          <li>增加高质量样本，扩大数据量以提高模型表现</li>
+          <li>继续调整模型，尝试不同路径解决中间态问题</li>
+          <li>app页面再细化，同时开始考虑利用app获取更多数据</li>
+        </ol>
+      </section>
+    </div>
+
+    <script>
+      const detailData = {
+        s1: {
+          title: "① 录音与切窗",
+          text: "每次采样固定 0.5 秒，采样率 16kHz，所以输入是 8000 个采样点。这一步先把输入标准化，避免后面模型被时长和采样率波动干扰。",
+          kv: [
+            ["窗口时长", "0.5 秒"],
+            ["采样率", "16,000 Hz"],
+            ["样本点数", "8,000 点"],
+            ["Bundle 字段", "frontend.windowSec / sampleRateHz"],
+          ],
+          cards: [],
+        },
+        s2: {
+          title: "② DistilHuBERT 编码",
+          text: "接收波形，输出时序 hidden states。本质是把“时域波形”映射到“高维语音语义空间”。",
+          kv: [],
+          cards: [
+            {
+              title: "HuBERT蒸馏",
+              text: "HuBERT是 Meta开发的语音模型，不需要人类给录音打标签，它自己听海量的录音，就能自己摸索出规律，但参数太大，无法在手机上运行。DistilHuBERT把7 层 CNN + 12 层 Transformer，蒸馏成2 层Transformer，并行拟合 HuBERT中最重要的第 4/8/12 层隐藏表示。",
+            },
+            {
+              title: "蒸馏收益",
+              text: "比起原模型，参数量减少了 73%，手机、嵌入式设备也能轻松装下，不占内存；运行速度提升了 4.6 倍，语音识别、处理几乎零延迟，实时响应，而性能只下降了微小的百分之几。",
+            },
+          ],
+        },
+        s3: {
+          title: "③ 时序池化 + 768 维向量",
+          text: "前端卷积总步长 320（5×2×2×2×2×2×2），所以 8000 点约对应 25 帧。每帧 768 维，mean pooling 后得到单个 768 维向量作为本次发音表示。",
+          kv: [
+            ["conv 总步长", "320"],
+            ["时间帧数(约)", "8000 / 320 = 25"],
+            ["每帧维度", "768"],
+            ["池化方式", "mean"],
+          ],
+          cards: [],
+        },
+        s4: {
+          title: "④ baseline 差分 + PCA16",
+          text: "先用会话前3条 baseline 取中位数，测试时做 delta=raw-baseline，突出“比你自己常态偏了多少”。然后 PCA 把 768 维压到 16 维，降低噪声和部署负担。",
+          kv: [
+            ["baseline 条数", "3 条"],
+            ["聚合方式", "median"],
+            ["PCA 输入", "768 维"],
+            ["PCA 输出", "16 维"],
+          ],
+          cards: [],
+        },
+        s5: {
+          title: "⑤ 标准化 + LR 输出概率",
+          text: "16维向量经过 scaler 标准化后喂给 Logistic Regression，输出 logit，再经 sigmoid 转成 probability。这个概率表达的是“更像 target_like 的程度”。",
+          kv: [
+            ["分类头", "Logistic Regression"],
+            ["logit 公式", "w·x + b"],
+            ["概率映射", "sigmoid(logit)"],
+            ["输出区间", "[0, 1]"],
+          ],
+          cards: [],
+        },
+        s6: {
+          title: "⑥ 阈值判定 + Debug 可追溯",
+          text: "当前 bundle 阈值是 0.2：probability≥0.2 判为 target_like。全过程字段（input/pca/z/logit/history）保留在 Debug，可导出复盘。",
+          kv: [
+            ["阈值", "0.2"],
+            ["正类标签", "target_like"],
+            ["负类标签", "baseline_like"],
+            ["调试输出", "snapshot / session package"],
+          ],
+          cards: [],
+        },
+      };
+
+      const timeline = document.getElementById("timeline");
+      const steps = Array.from(timeline.querySelectorAll(".step"));
+      const titleEl = document.getElementById("detail-title");
+      const textEl = document.getElementById("detail-text");
+      const kvEl = document.getElementById("detail-kv");
+      const cardsEl = document.getElementById("detail-cards");
+
+      function renderDetail(id) {
+        const data = detailData[id];
+        if (!data) return;
+        titleEl.textContent = data.title;
+        textEl.textContent = data.text;
+
+        kvEl.innerHTML = "";
+        data.kv.forEach(([k, v]) => {
+          const item = document.createElement("div");
+          item.className = "item";
+          item.innerHTML = `<div class="k">${k}</div><div class="v">${v}</div>`;
+          kvEl.appendChild(item);
+        });
+
+        cardsEl.innerHTML = "";
+        if (data.cards.length > 0) {
+          cardsEl.classList.add("show");
+          data.cards.forEach((card) => {
+            const div = document.createElement("div");
+            div.className = "detail-card";
+            div.innerHTML = `<h4>${card.title}</h4><p>${card.text}</p>`;
+            cardsEl.appendChild(div);
+          });
+        } else {
+          cardsEl.classList.remove("show");
+        }
+      }
+
+      steps.forEach((step) => {
+        step.addEventListener("click", () => {
+          steps.forEach((n) => n.classList.remove("active"));
+          step.classList.add("active");
+          renderDetail(step.dataset.id);
+        });
+      });
+
+      renderDetail("s1");
+    </script>
+  </body>
+</html>
